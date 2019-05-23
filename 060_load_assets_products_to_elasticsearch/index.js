@@ -39,16 +39,6 @@ exports.handler = async (event, context) => {
     log: 'debug'
   });
   
-  /*await deleteIndex(client, event.ES_INDEX_NAME);
-  return;*/
-  
-  /*try{
-    await createIndex(client, event.ES_INDEX_NAME);
-  } catch(err){
-    console.log(err);
-  }
-  return;*/
-  
   //if products_call are empty i can prepare the statement injecting products inside assets json
   //const sqlCount = "select count(*) as totalRows from ((select * from assets_call) union (select * from products_call)) as ap";
   const sqlCount = "select count(*) as totalRows from products_call";
@@ -80,97 +70,7 @@ exports.handler = async (event, context) => {
             if(assetsLength>0){
               //let body = assets.slice(start,end).map(item => {
               let body = assets.map(item => {
-                let asset = JSON.parse(item);
-                
-                const filenameDotIndex = asset['file_name'].lastIndexOf('.'); 
-                const filename = asset['file_name'].substring(0,filenameDotIndex);
-                const ext = asset['file_name'].substring((filenameDotIndex+1))
-                
-                switch(ext.toLowerCase()){
-                  case 'tif':
-                    asset['CDN_Thumb'] = filename+"_Thumb.jpeg";
-                    asset['CDN_mLow'] = filename+"_mLow.jpeg";
-                    asset['CDN_mMid'] = filename+"_mMid.jpeg";
-                    asset['CDN_mHigh'] = filename+"_mHigh."+ext;
-                  break;
-                  case 'jpeg':
-                  case 'jpg':
-                    asset['CDN_Thumb'] = filename+"_Thumb.jpeg";
-                    asset['CDN_mLow'] = filename+"_mLow.jpeg";
-                    asset['CDN_mMid'] = filename+"_mMid.jpeg";
-                    asset['CDN_mHigh'] = filename+"_mHigh.jpeg";
-                  break;
-                  case 'gif':
-                    asset['CDN_Thumb'] = filename+"_Thumb.jpeg";
-                    asset['CDN_mLow'] = filename+"_mLow.jpeg";
-                    asset['CDN_mMid'] = filename+"_mMid.jpeg";
-                    asset['CDN_mHigh'] = filename+"_mHigh.gif";
-                  break;
-                  case 'png':
-                    asset['CDN_Thumb'] = filename+"_Thumb.jpeg";
-                    asset['CDN_mLow'] = filename+"_mLow.jpeg";
-                    asset['CDN_mMid'] = filename+"_mMid.jpeg";
-                    asset['CDN_mHigh'] = filename+"_mHigh.png";
-                  break;
-                  case 'ai':
-                    asset['CDN_Thumb'] = filename+"_Thumb.jpeg";
-                    asset['CDN_mLow'] = filename+"_mLow.jpeg";
-                    asset['CDN_mMid'] = filename+"_mMid.jpeg";
-                    asset['CDN_mHigh'] = filename+"_mHigh.ai";
-                  break;
-                  case 'eps':
-                    asset['CDN_Thumb'] = filename+"_Thumb.jpeg";
-                    asset['CDN_mLow'] = filename+"_mLow.jpeg";
-                    asset['CDN_mMid'] = filename+"_mMid.jpeg";
-                    asset['CDN_mHigh'] = filename+"_mHigh.eps";
-                  break;
-                  case 'mov':
-                    asset['CDN_Thumb'] = filename+"_Thumb.jpeg";
-                    asset['CDN_mLow'] = filename+"_mLow.mov";
-                    asset['CDN_mMid'] = filename+"_mMid.mov";
-                    asset['CDN_mHigh'] = filename+"_mHigh.mov";
-                  break;
-                  case 'mp4':
-                    asset['CDN_Thumb'] = filename+"_Thumb.jpeg";
-                    asset['CDN_mLow'] = filename+"_mLow.mp4";
-                    asset['CDN_mMid'] = filename+"_mMid.mp4";
-                    asset['CDN_mHigh'] = filename+"_mHigh.mp4";
-                  break;
-                  case 'm4v':
-                    asset['CDN_Thumb'] = filename+"_Thumb.jpeg";
-                    asset['CDN_mLow'] = filename+"_mLow.mp4";
-                    asset['CDN_mMid'] = filename+"_mMid.mp4";
-                    asset['CDN_mHigh'] = filename+"_mHigh.mp4";
-                  break;
-                  case 'zip':
-                    asset['CDN_Thumb'] = "";
-                    asset['CDN_mLow'] = "";
-                    asset['CDN_mMid'] = "";
-                    asset['CDN_mHigh'] = filename+".zip";
-                  break;
-                  case 'pdf':
-                    asset['CDN_Thumb'] = "";
-                    asset['CDN_mLow'] = "";
-                    asset['CDN_mMid'] = "";
-                    asset['CDN_mHigh'] = filename+".pdf";
-                  break;
-                  case 'pptx':
-                    asset['CDN_Thumb'] = "";
-                    asset['CDN_mLow'] = "";
-                    asset['CDN_mMid'] = "";
-                    asset['CDN_mHigh'] = filename+".pptx";
-                  break;
-                }
-                
-                /* removing old product metadata in asset root */
-                //asset = arrayRemove(asset,'collection');
-                asset = arrayRemove(asset,'product_name');
-                asset = arrayRemove(asset,'full_sku');
-                //asset = arrayRemove(asset,'color_name');
-                //asset = arrayRemove(asset,'colour_code');
-                //asset = arrayRemove(asset,'segmentation');
-                asset = arrayRemove(asset,'product_type_asset');
-                
+                let asset = JSON.parse(item);                
                 return [{
                   'index':{
                     '_index' : event.ES_INDEX_NAME,
