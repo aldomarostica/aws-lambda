@@ -1,0 +1,24 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: 'AWS::Serverless-2016-10-31'
+Description: An AWS Serverless Specification template describing your function.
+Resources:
+  001extractassetsmetadatafromf4:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      Handler: index.handler
+      Runtime: nodejs8.10
+      CodeUri: .
+      Description: ''
+      MemorySize: 512
+      Timeout: 123
+      Role: 'arn:aws:iam::254804685961:role/lambda_basic_execution'
+      VpcConfig:
+        SecurityGroupIds:
+          - sg-0e3ac76126d8b4e27
+        SubnetIds:
+          - subnet-0f64510ccc6c7201e
+          - subnet-082a2f2fb51747acc
+      Environment:
+        Variables:
+          F4_MAX_META_FIELDS: '5'
+          F4_MAX_PROMISE_CALLS: '3'
